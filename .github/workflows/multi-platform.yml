@@ -1,0 +1,32 @@
+name: Build Geode Mod
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - "**"
+
+jobs:
+  build:
+    name: Build 2
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Catch up # see https://github.com/actions/checkout/issues/439
+        run: git pull origin ${{ github.ref }} --no-rebase
+
+      - name: Change geode to 4.2.1
+        run: |
+          jq '.geode = "4.2.1"' mod.json > temp_mod.json && mv temp_mod.json mod.json
+        
+      - name: Build 2
+        uses: geode-catgirls/build-geode-mod@main
+        with:
+          bindings: geode-catgirls/bindings
+          target: iOS
+          combine: true
+          gh-pat: ${{ secrets.GH_PAT }}
