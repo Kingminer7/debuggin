@@ -6,6 +6,6 @@ using namespace geode::prelude;
 
 class $modify (CCActionEase) {
   void update(float dt) {
-    log::info("Test - {}", typeid(this).name())
+    log::info("Test - {}", typeid(this).name());
   }
 }
